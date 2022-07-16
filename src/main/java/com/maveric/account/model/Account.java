@@ -13,7 +13,6 @@ import java.sql.Date;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Document(collection = "account")
