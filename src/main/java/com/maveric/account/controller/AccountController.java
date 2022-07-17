@@ -31,6 +31,9 @@ public class AccountController {
         Account account = convertToEntity(accountDTO);
         return new ResponseEntity<>(accountService.createAccount(account), HttpStatus.CREATED);
     }
+
+    
+
     private Account convertToEntity(AccountDTO accountDTO) {
         return modelMapper.map(accountDTO, Account.class);
     }
