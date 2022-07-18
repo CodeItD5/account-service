@@ -2,6 +2,7 @@ package com.maveric.account.controller;
 
 import com.maveric.account.model.Account;
 import com.maveric.account.model.AccountDTO;
+import com.maveric.account.model.ApplicationError;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,12 @@ public class AccountController {
     private ResponseEntity<Page<Account>> getUserAccounts(@PathVariable String customerId, @RequestParam Integer page, @RequestParam Integer pageSize){
         return new ResponseEntity<>(accountService.getUserAccounts(customerId, page, pageSize), HttpStatus.OK);
     }
-    
+
+    @GetMapping("{customerId}/accounts/{accountId}")
+    private ResponseEntity<Account> getUserAccountByAccountId(@PathVariable String customerId, @PathVariable String accountId){
+        return new ResponseEntity<>(accountService.getUserAccountByAccountId(customerId, accountId), HttpStatus.OK);
+    }
+
 
     private Account convertToEntity(AccountDTO accountDTO) {
         return modelMapper.map(accountDTO, Account.class);
