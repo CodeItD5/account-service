@@ -3,6 +3,7 @@ package com.maveric.account.controller;
 import com.maveric.account.model.Account;
 import com.maveric.account.model.AccountDTO;
 import com.maveric.account.model.ApplicationError;
+import com.maveric.account.service.NextSequenceService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +23,19 @@ public class AccountController {
 
     private final AccountServiceImpl accountService;
 
+    private final NextSequenceService nextSequenceService;
 
-    public AccountController(AccountServiceImpl accountService) {
+
+    public AccountController(AccountServiceImpl accountService, NextSequenceService nextSequenceService) {
         this.accountService = accountService;
+        this.nextSequenceService = nextSequenceService;
     }
 
     @PostMapping("{customerId}/accounts")
     private ResponseEntity<Account> createAccount(@Valid @RequestBody AccountDTO accountDTO, @PathVariable String customerId){
         accountDTO.setCustomerId(customerId);
         Account account = convertToEntity(accountDTO);
+        account.setId(String.valueOf(nextSequenceService.getNextSequence("customSequences")));
         return new ResponseEntity<>(accountService.createAccount(account), HttpStatus.CREATED);
     }
 

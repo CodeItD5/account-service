@@ -21,13 +21,15 @@ import java.util.Date;
 public class Account {
 
     @Id
+    @Field(name = "_id")
     private String id;
 
-    @Field(name = "customerId")
-    private String customerId;
 
     @Field(name = "type")
     private String type;
+
+    @Field(name = "customer_id")
+    private String customerId;
 
     @Field(name="created_at")
     private Date createdAt;
