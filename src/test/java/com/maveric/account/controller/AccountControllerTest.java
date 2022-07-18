@@ -7,6 +7,7 @@ import com.maveric.account.model.AccountDTO;
 import com.maveric.account.model.AccountType;
 import com.maveric.account.model.ApplicationError;
 import com.maveric.account.service.AccountServiceImpl;
+import com.maveric.account.service.NextSequenceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class AccountControllerTest {
     @MockBean
     private AccountServiceImpl accountService;
 
+    @MockBean
+    private NextSequenceService nextSequenceService;
+
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +50,7 @@ public class AccountControllerTest {
     @Test
     @DisplayName("Test to check if createAccount endpoint works fine")
     void createAccountTest() throws Exception {
-
+        given(nextSequenceService.getNextSequence("customSequences")).willReturn(1);
         given(accountService.createAccount(account)).willReturn(account);
         mockMvc.perform(post("/api/v1/customers/1/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -59,8 +63,7 @@ public class AccountControllerTest {
         Account account = Account.builder().id("1").customerId("1").type("CURRENT").build();
         List<Account> accounts = new ArrayList<>();
         accounts.add(account);
-        final Page<Account> page = new PageImpl<>(accounts);
-        given(accountService.getUserAccounts("1",0,2)).willReturn(page);
+        given(accountService.getUserAccounts("1",0,2)).willReturn(accounts);
         mockMvc.perform(get("/api/v1/customers/1/accounts?page=0&pageSize=2"))
                 .andExpect(status().isOk());
     }
@@ -84,7 +87,7 @@ public class AccountControllerTest {
     @DisplayName("Test to check if updateUserAccountByAccountId endpoint works fine")
     void updateUserAccountByAccountIdTest() throws Exception {
         given(accountService.updateUserAccountByAccountId("1","1", accountFound)).willReturn(account);
-        mockMvc.perform(get("/api/v1/customers/1/accounts/1")
+        mockMvc.perform(put("/api/v1/customers/1/accounts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(accountDTO)))
                 .andExpect(status().isOk());
