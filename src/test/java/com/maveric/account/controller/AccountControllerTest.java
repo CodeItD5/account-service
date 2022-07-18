@@ -73,6 +73,13 @@ public class AccountControllerTest {
                 .andExpect(status().isOk());
     }
 
+
+    @DisplayName("Test to check if deleteUserAccountByAccountId endpoint works fine")
+    void deleteUserAccountByAccountIdTest() throws Exception {
+        given(accountService.deleteUserAccountByAccountId("1", "1")).willReturn(applicationError);
+        mockMvc.perform(delete("/api/v1/customers/1/accounts/1")).andExpect(status().isOk());
+
+    }
     @Test
     @DisplayName("Test to check if updateUserAccountByAccountId endpoint works fine")
     void updateUserAccountByAccountIdTest() throws Exception {

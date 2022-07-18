@@ -58,6 +58,12 @@ public class AccountServiceTest {
     }
 
     @Test
+    @DisplayName("Test to check service method for deleteUserAccountByAccountId")
+    void deleteUserAccountByAccountIdService(){
+        when(accountRepo.findByCustomerIdAndId("1","1")).thenReturn(Optional.of(account));
+        Assertions.assertThat(accountService.deleteUserAccountByAccountId("1","1")).isEqualTo(applicationError);
+    }
+
     @DisplayName("Test to check service method for updateUserAccountByAccountId")
     void updateUserAccountByAccountIdService(){
         when(accountRepo.findByCustomerIdAndId("1","1")).thenReturn(Optional.of(accountFound));
