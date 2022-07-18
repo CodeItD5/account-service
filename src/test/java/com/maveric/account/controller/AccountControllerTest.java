@@ -73,6 +73,16 @@ public class AccountControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("Test to check if updateUserAccountByAccountId endpoint works fine")
+    void updateUserAccountByAccountIdTest() throws Exception {
+        given(accountService.updateUserAccountByAccountId("1","1", accountFound)).willReturn(account);
+        mockMvc.perform(get("/api/v1/customers/1/accounts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(accountDTO)))
+                .andExpect(status().isOk());
+    }
+
     private String asJsonString(Object obj) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(obj);
     }

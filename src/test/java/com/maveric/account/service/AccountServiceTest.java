@@ -57,5 +57,11 @@ public class AccountServiceTest {
         Assertions.assertThat(accountService.getUserAccountByAccountId("1","1")).isEqualTo(accountFound);
     }
 
-
+    @Test
+    @DisplayName("Test to check service method for updateUserAccountByAccountId")
+    void updateUserAccountByAccountIdService(){
+        when(accountRepo.findByCustomerIdAndId("1","1")).thenReturn(Optional.of(accountFound));
+        when(accountRepo.save(accountFound)).thenReturn(account);
+        Assertions.assertThat(accountService.updateUserAccountByAccountId("1","1",account)).isEqualTo(account);
+    }
 }

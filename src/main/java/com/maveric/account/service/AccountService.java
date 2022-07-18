@@ -11,4 +11,7 @@ public interface AccountService {
 
     Account getUserAccountByAccountId(String customerId, String accountId);
 
+    Account updateUserAccountByAccountId(String customerId, String accountId, Account account);
+
+
 }
