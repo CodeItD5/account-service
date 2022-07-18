@@ -42,6 +42,13 @@ public class AccountServiceImpl implements AccountService{
         return repository.findByCustomerIdAndId(customerId, accountId).orElseThrow(()-> new NullPointerException(accountNotFound));
 
     }
+
+    @Override
+    public ApplicationError deleteUserAccountByAccountId(String customerId, String accountId) {
+        Account accountFound = repository.findByCustomerIdAndId(customerId,accountId).orElseThrow(()-> new NullPointerException(accountNotFound));
+        repository.delete(accountFound);
+        return  new ApplicationError(HttpStatus.OK, "Account has been deleted for given customer");
+    }
 }
 
 

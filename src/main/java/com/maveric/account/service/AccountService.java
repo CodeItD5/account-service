@@ -11,4 +11,7 @@ public interface AccountService {
 
     Account getUserAccountByAccountId(String customerId, String accountId);
 
+    ApplicationError deleteUserAccountByAccountId(String customerId, String accountId);
+
+
 }

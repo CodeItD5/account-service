@@ -44,6 +44,11 @@ public class AccountController {
         return new ResponseEntity<>(accountService.getUserAccountByAccountId(customerId, accountId), HttpStatus.OK);
     }
 
+    @DeleteMapping("{customerId}/accounts/{accountId}")
+    private ResponseEntity<ApplicationError> deleteUserAccountByAccountId(@PathVariable String customerId, @PathVariable String accountId){
+        return new ResponseEntity<>(accountService.deleteUserAccountByAccountId(customerId, accountId), HttpStatus.OK);
+    }
+
 
     private Account convertToEntity(AccountDTO accountDTO) {
         return modelMapper.map(accountDTO, Account.class);
