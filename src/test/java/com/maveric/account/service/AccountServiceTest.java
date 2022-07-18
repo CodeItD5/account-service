@@ -1,5 +1,7 @@
 package com.maveric.account.service;
 
+import com.maveric.account.exception.AccountNotFoundException;
+import com.maveric.account.exception.UserNotFoundException;
 import com.maveric.account.model.Account;
 import com.maveric.account.model.ApplicationError;
 import com.maveric.account.repository.AccountRepo;
@@ -28,6 +30,7 @@ public class AccountServiceTest {
     Account account = Account.builder().customerId("1").type("CURRENT").createdAt(getDate).updatedAt(new Date()).build();
     Account accountFound = Account.builder().customerId("1").type("CURRENT").createdAt(getDate).updatedAt(getDate).build();
 
+    Account accountNotFound = Account.builder().build();
     ApplicationError applicationError =  new ApplicationError(HttpStatus.OK, "Account has been deleted for given customer");
 
     AccountServiceImpl accountService = new AccountServiceImpl(accountRepo);
@@ -47,7 +50,17 @@ public class AccountServiceTest {
         accounts.add(account);
         final Page<Account> page = new PageImpl<>(accounts);
         when(accountRepo.findByCustomerId("1",pageable)).thenReturn(page);
-        Assertions.assertThat(accountService.getUserAccounts("1",0,2)).isEqualTo(page);
+        Assertions.assertThat(accountService.getUserAccounts("1",0,2)).isEqualTo(accounts);
+    }
+
+    @Test
+    @DisplayName("Test to check if service method for getUsersAccount throws Exception")
+    void getUsersAccountServiceExceptionTest(){
+        Pageable pageable = PageRequest.of(0,2);
+        List<Account> accounts = new ArrayList<>();
+        final Page<Account> page = new PageImpl<>(accounts);
+        when(accountRepo.findByCustomerId("1",pageable)).thenReturn(page);
+        Assertions.assertThatThrownBy(()->accountService.getUserAccounts("1",0,2)).isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -55,6 +68,13 @@ public class AccountServiceTest {
     void getUserAccountByAccountIdService(){
         when(accountRepo.findByCustomerIdAndId("1","1")).thenReturn(Optional.of(accountFound));
         Assertions.assertThat(accountService.getUserAccountByAccountId("1","1")).isEqualTo(accountFound);
+    }
+
+    @Test
+    @DisplayName("Test to check service method for getUserAccountByAccountId throws Exception")
+    void getUserAccountByAccountIdServiceExceptionTest(){
+        when(accountRepo.findByCustomerIdAndId("1","1")).thenThrow((new AccountNotFoundException("Account not found")));
+        Assertions.assertThatThrownBy(()->accountService.getUserAccountByAccountId("1","1")).isInstanceOf(AccountNotFoundException.class);
     }
 
     @Test
