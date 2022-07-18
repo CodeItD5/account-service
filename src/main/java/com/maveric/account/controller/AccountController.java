@@ -44,6 +44,11 @@ public class AccountController {
         return new ResponseEntity<>(accountService.getUserAccountByAccountId(customerId, accountId), HttpStatus.OK);
     }
 
+    @PutMapping("{customerId}/accounts/{accountId}")
+    private ResponseEntity<Account> updateUserAccountByAccountId(@PathVariable String customerId, @PathVariable String accountId, @RequestBody AccountDTO accountDTO){
+        Account account = convertToEntity(accountDTO);
+        return new ResponseEntity<>(accountService.updateUserAccountByAccountId(customerId, accountId, account), HttpStatus.OK);
+    }
 
     private Account convertToEntity(AccountDTO accountDTO) {
         return modelMapper.map(accountDTO, Account.class);
