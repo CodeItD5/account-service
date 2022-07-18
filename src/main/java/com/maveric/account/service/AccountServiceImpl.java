@@ -45,9 +45,18 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public ApplicationError deleteUserAccountByAccountId(String customerId, String accountId) {
-        Account accountFound = repository.findByCustomerIdAndId(customerId,accountId).orElseThrow(()-> new NullPointerException(accountNotFound));
+        Account accountFound = repository.findByCustomerIdAndId(customerId, accountId).orElseThrow(() -> new NullPointerException(accountNotFound));
         repository.delete(accountFound);
-        return  new ApplicationError(HttpStatus.OK, "Account has been deleted for given customer");
+        return new ApplicationError(HttpStatus.OK, "Account has been deleted for given customer");
+
+    }
+    public Account updateUserAccountByAccountId(String customerId, String accountId, Account account) {
+        Account accountFound = repository.findByCustomerIdAndId(customerId,accountId).orElseThrow(()-> new NullPointerException(accountNotFound));
+        Date updatedDate = new Date(Calendar.getInstance().getTime().getTime());
+        accountFound.setUpdatedAt(updatedDate);
+        accountFound.setCustomerId(account.getCustomerId());
+        accountFound.setType(account.getType());
+        return repository.save(accountFound);
     }
 }
 

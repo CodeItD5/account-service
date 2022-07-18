@@ -73,10 +73,20 @@ public class AccountControllerTest {
                 .andExpect(status().isOk());
     }
 
+
     @DisplayName("Test to check if deleteUserAccountByAccountId endpoint works fine")
     void deleteUserAccountByAccountIdTest() throws Exception {
-        given(accountService.deleteUserAccountByAccountId("1","1")).willReturn(applicationError);
-        mockMvc.perform(delete("/api/v1/customers/1/accounts/1"))
+        given(accountService.deleteUserAccountByAccountId("1", "1")).willReturn(applicationError);
+        mockMvc.perform(delete("/api/v1/customers/1/accounts/1")).andExpect(status().isOk());
+
+    }
+    @Test
+    @DisplayName("Test to check if updateUserAccountByAccountId endpoint works fine")
+    void updateUserAccountByAccountIdTest() throws Exception {
+        given(accountService.updateUserAccountByAccountId("1","1", accountFound)).willReturn(account);
+        mockMvc.perform(get("/api/v1/customers/1/accounts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(accountDTO)))
                 .andExpect(status().isOk());
     }
 
